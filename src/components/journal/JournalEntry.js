@@ -1,30 +1,57 @@
 import React from 'react';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { activeNote } from '../../actions/notes';
 
-export const JournalEntry = () => {
+export const JournalEntry = ({
+    id,
+    date,
+    title,
+    body,
+    url
+}) => {
+
+    const dispatch = useDispatch();
+    const noteDate = moment(date);
+
+    const handleEntryClick = () => {
+        dispatch(
+            activeNote( id, {
+                date, title, body, url
+            })
+        );
+    }
+
     return (
-        <div className="journal__entry">
-            <div
-                className="journal__entry-picture"
-                style={{
-                    backgroundSize: 'cover',
-                    backgroundImage: 'url(https://i.pinimg.com/originals/04/07/c5/0407c560aee24c72d85aad64168cdf75.jpg)',
-                }}
-            />
+        <div
+            className="journal__entry animate__animated animate__bounceInLeft"
+            onClick={ handleEntryClick }
+        >
+            {
+                url &&
+                <div
+                    className="journal__entry-picture"
+                    style={{
+                        backgroundSize: 'cover',
+                        backgroundImage: `url(${ url })`,
+                    }}
+                />
+            }
 
             <div className="journal__entry-body">
                 <p className="journal__entry-title">
-                    Un nuevo día
+                    { title }
                 </p>
                 <p className="journal__entry-content">
-                    Quis irure dolor commodo duis quis commodo proident ad nisi.
+                    { body }
                 </p>
             </div>
 
             <div className="journal__entry-date-box">
                 <span>
-                    Monday
+                    { noteDate.format('dddd') }
                 </span>
-                <h4>25</h4>
+                <h4>{ noteDate.format('Do') }</h4>
             </div>
         </div>
     )
