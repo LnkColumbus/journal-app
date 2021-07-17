@@ -29,12 +29,10 @@ export const startLoginEmailPassword = ( email, password ) => {
 
         dispatch( startLoading() );
 
-        firebase.auth().signInWithEmailAndPassword( email, password )
+        return firebase.auth().signInWithEmailAndPassword( email, password )
             .then( ({ user }) => {
+                dispatch( login(user.uid, user.displayName ) );
                 dispatch( finishLoading() );
-                dispatch(
-                    login(user.uid, user.displayName )
-                );
             })
             .catch( e => {
                 console.log(e);
